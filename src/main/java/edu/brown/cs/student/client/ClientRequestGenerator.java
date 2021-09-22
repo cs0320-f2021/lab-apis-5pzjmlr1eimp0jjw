@@ -3,7 +3,9 @@ package edu.brown.cs.student.client;
 import edu.brown.cs.student.client.ClientAuth;
 
 import java.net.URI;
+import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Duration;
 
 /**
@@ -22,7 +24,14 @@ public class ClientRequestGenerator {
     // TODO build and return a new GET HttpRequest.
     // See https://docs.oracle.com/en/java/javase/11/docs/api/java.net.http/java/net/http/HttpRequest.html and
     // https://docs.oracle.com/en/java/javase/11/docs/api/java.net.http/java/net/http/HttpRequest.Builder.html
-    return null;
+    HttpClient client = HttpClient.newHttpClient();
+    HttpRequest request = HttpRequest.newBuilder(URI.create(reqUri))
+        .build();
+    client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        .thenApply(HttpResponse::body)
+        .thenAccept(System.out::println)
+        .join();
+    return request;
   }
 
   /**
